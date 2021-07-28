@@ -1,0 +1,23 @@
+Planejamento DevsNotes API
+
+*O que o projeto precisa fazer?
+-Listar as anotaçoes
+-Pegar informações de UMA anotação
+-Inserir uma anotação nova
+-Atualizar uma anotação
+-Deletar uma anotação.
+
+
+*Qual a estrutura de dados?
+-Local para armazenar as anotações
+--id
+--Title
+--body
+
+
+*Quais os endpoints?
+--(GET) /api/notes              *todas
+--(GET) /api/note/id            *unica
+--(POST) /api/note (title,body) *inserindo
+--(PUT) /api/note/id            *atualização
+--(DELETE) /api/note/id         *delete
