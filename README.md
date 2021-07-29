@@ -30,13 +30,13 @@ No seu terminal, rode os comandos abaixo:
 
 ```bash
 $ git clone https://github.com/luizsantos85/apiDevsNotes.git
-$ cd front-end
+$ cd apiDevsNotes
 ```
 
 Instalar depêndencias e executar backend:
 
 ```bash
-$ cd backend
+$ cd apiDevsNotes
 $ npm install
 $ npm start
 ```
