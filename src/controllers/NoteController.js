@@ -76,5 +76,17 @@ module.exports = {
       res.json(json);
    },
 
-   delete: async (req, res) => {},
+   delete: async (req, res) => {
+      let json = { error: '', result: {} };
+
+      let id = req.params.id;
+      let note = await NoteService.findById(id);
+      if (note) {
+         await NoteService.delete(id);
+      } else {
+         json.error = 'Id inválido.';
+      }
+
+      res.json(json);
+   },
 };

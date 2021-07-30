@@ -17,7 +17,7 @@ module.exports = {
       return new Promise((resolve, reject) => {
          db.query('SELECT * FROM notes WHERE id=?', [id], (error, results) => {
             if (error) {
-               reject('não inserido');
+               reject(error);
                return;
             }
             if (results.length > 0) {
@@ -58,6 +58,18 @@ module.exports = {
                resolve(results);
             }
          );
+      });
+   },
+
+   delete: async (id) => {
+      return new Promise((resolve, reject) => {
+         db.query('DELETE FROM notes WHERE id = ?', [id], (error, results) => {
+            if (error) {
+               reject(error);
+               return;
+            }
+            resolve(results);
+         });
       });
    },
 };
