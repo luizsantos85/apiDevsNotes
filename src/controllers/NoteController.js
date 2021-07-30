@@ -39,6 +39,7 @@ module.exports = {
       let title = req.body.title;
       let body = req.body.body;
 
+    //   console.log(title)
       if (title && body) {
          let noteId = await NoteService.add(title, body);
 
@@ -48,11 +49,10 @@ module.exports = {
             body,
          };
       } else {
-         json.error = 'Campos não preenchidos.';
+         json.error = 'Campos não preenchidos';
       }
 
       res.json(json);
-      
    },
 
    edit: async (req, res) => {},

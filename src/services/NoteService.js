@@ -17,7 +17,7 @@ module.exports = {
       return new Promise((resolve, reject) => {
          db.query('SELECT * FROM notes WHERE id=?', [id], (error, results) => {
             if (error) {
-               reject(error);
+               reject('não inserido');
                return;
             }
             if (results.length > 0) {
@@ -31,9 +31,8 @@ module.exports = {
 
    add: (title, body) => {
       return new Promise((resolve, reject) => {
-
          db.query(
-            'INSERT INTO notes (title,body) VALUES (?,?)',
+            'INSERT INTO notes (title, body) VALUES (?, ?)',
             [title, body],
             (error, results) => {
                if (error) {
@@ -43,7 +42,6 @@ module.exports = {
                resolve(results.insertId);
             }
          );
-         
       });
    },
 };

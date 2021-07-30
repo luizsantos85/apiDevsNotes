@@ -12,6 +12,4 @@ router.put('/note/:id', NoteController.edit);
 router.delete('/note/:id', NoteController.delete);
 
 
-
-
 module.exports = router;
