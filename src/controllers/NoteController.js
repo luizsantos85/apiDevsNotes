@@ -19,11 +19,43 @@ module.exports = {
       res.json(json);
    },
 
-   one: (req, res) => {},
+   one: async (req, res) => {
+      let json = { error: '', result: {} };
 
-   create: (req, res) => {},
+      let id = req.params.id;
+      let note = await NoteService.findById(id);
+      if (note) {
+         json.result = note;
+      } else {
+         json.error = 'Id inválido.';
+      }
 
-   edit: (req, res) => {},
+      res.json(json);
+   },
 
-   delete: (req, res) => {},
+   create: async (req, res) => {
+      let json = { error: '', result: {} };
+
+      let title = req.body.title;
+      let body = req.body.body;
+
+      if (title && body) {
+         let noteId = await NoteService.add(title, body);
+
+         json.result = {
+            id: noteId,
+            title,
+            body,
+         };
+      } else {
+         json.error = 'Campos não preenchidos.';
+      }
+
+      res.json(json);
+      
+   },
+
+   edit: async (req, res) => {},
+
+   delete: async (req, res) => {},
 };
