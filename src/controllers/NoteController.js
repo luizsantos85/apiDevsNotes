@@ -1,23 +1,24 @@
 const NoteService = require('../services/NoteService');
 
 module.exports = {
-   ping: (req, res) => { //teste api
+   ping: (req, res) => {
+      //teste api
       res.json({ pong: true });
    },
 
    all: async (req, res) => {
       let notes = await NoteService.getAll();
-      res.json({ notes });
+      res.status(200).json(notes);
    },
 
    one: async (req, res) => {
       let id = req.params.id;
       let note = await NoteService.findById(id);
-      if (note) {
-         res.json({ note });
-      } else {
-         res.json({ error: 'Nota não encontrada!' });
+      if (!note) {
+         res.status(400).json({ error: 'Id não encontrado!' });
+         return;
       }
+      res.status(200).json(note);
    },
 
    create: async (req, res) => {
@@ -25,7 +26,7 @@ module.exports = {
       let body = req.body.body;
 
       if (!title || !body) {
-         res.json({ error: 'Campo não preenchido!' });
+         res.status(400).json({ error: 'Campo não preenchido!' });
          return;
       }
 
@@ -35,7 +36,7 @@ module.exports = {
          title,
          body,
       };
-      res.json({ note });
+      res.status(201).json(note);
    },
 
    edit: async (req, res) => {
@@ -45,12 +46,12 @@ module.exports = {
       let note = await NoteService.findById(id);
 
       if (!note) {
-         res.json({ error: 'Nota não encontrada!' });
+         res.status(400).json({ error: 'Id não encontrado!' });
          return;
       }
 
       if (!title || !body) {
-         res.json({ error: 'Campo não preenchido!' });
+         res.status(400).json({ error: 'Campo não preenchido!' });
          return;
       }
 
@@ -59,7 +60,7 @@ module.exports = {
       note.body = body;
 
       await NoteService.update(id, title, body);
-      res.json({ note });
+      res.status(201).json(note);
    },
 
    delete: async (req, res) => {
@@ -68,11 +69,11 @@ module.exports = {
       let note = await NoteService.findById(id);
 
       if (!note) {
-         res.json({ error: 'Id inválido.' });
-         return; 
+         res.status(400).json({ error: 'Id inválido.' });
+         return;
       }
 
       await NoteService.delete(id);
-      res.json({});
+      res.status(200).json({});
    },
 };
