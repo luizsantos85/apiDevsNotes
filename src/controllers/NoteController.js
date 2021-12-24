@@ -1,92 +1,78 @@
 const NoteService = require('../services/NoteService');
 
 module.exports = {
-   ping: (req, res) => {
+   ping: (req, res) => { //teste api
       res.json({ pong: true });
    },
 
    all: async (req, res) => {
-      let json = { error: '', result: [] };
-
       let notes = await NoteService.getAll();
-      for (let i in notes) {
-         json.result.push({
-            id: notes[i].id,
-            title: notes[i].title,
-         });
-      }
-
-      res.json(json);
+      res.json({ notes });
    },
 
    one: async (req, res) => {
-      let json = { error: '', result: {} };
-
       let id = req.params.id;
       let note = await NoteService.findById(id);
       if (note) {
-         json.result = note;
+         res.json({ note });
       } else {
-         json.error = 'Id inválido.';
+         res.json({ error: 'Nota não encontrada!' });
       }
-
-      res.json(json);
    },
 
    create: async (req, res) => {
-      let json = { error: '', result: {} };
-
       let title = req.body.title;
       let body = req.body.body;
 
-      if (title && body) {
-         let noteId = await NoteService.add(title, body);
-
-         json.result = {
-            id: noteId,
-            title,
-            body,
-         };
-      } else {
-         json.error = 'Campos não preenchidos';
+      if (!title || !body) {
+         res.json({ error: 'Campo não preenchido!' });
+         return;
       }
 
-      res.json(json);
+      let noteId = await NoteService.add(title, body);
+      let note = {
+         id: noteId,
+         title,
+         body,
+      };
+      res.json({ note });
    },
 
    edit: async (req, res) => {
-      let json = { error: '', result: {} };
-
       let id = req.params.id;
-      let title = req.body.title;
-      let body = req.body.body;
+      let { title, body } = req.body;
 
-      if (id && title && body) {
-         await NoteService.update(id, title, body);
+      let note = await NoteService.findById(id);
 
-         json.result = {
-            id,
-            title,
-            body,
-         };
-      } else {
-         json.error = 'Campos não preenchidos';
+      if (!note) {
+         res.json({ error: 'Nota não encontrada!' });
+         return;
       }
 
-      res.json(json);
+      if (!title || !body) {
+         res.json({ error: 'Campo não preenchido!' });
+         return;
+      }
+
+      note.id = id;
+      note.title = title;
+      note.body = body;
+
+      await NoteService.update(id, title, body);
+      res.json({ note });
    },
 
    delete: async (req, res) => {
-      let json = { error: '', result: {} };
-
       let id = req.params.id;
+
       let note = await NoteService.findById(id);
-      if (note) {
-         await NoteService.delete(id);
-      } else {
-         json.error = 'Id inválido.';
+
+      if (!note) {
+         res.json({ error: 'Id inválido.' });
+         return; 
       }
 
-      res.json(json);
+      await NoteService.delete(id);
+      res.json({});
    },
 };
